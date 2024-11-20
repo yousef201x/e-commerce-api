@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admins;
 
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
+use App\Models\Admin;
 
-class AuthController extends Controller
+class AdminAuthController extends Controller
 {
     /**
-     * Login user and issue tokens without using Auth::attempt().
+     * Login Admin and issue tokens without using Auth::attempt().
      */
 
 
@@ -21,20 +21,20 @@ class AuthController extends Controller
         try {
             // Validate the request
             $validated = $request->validate([
-                'email' => 'required|email|exists:users,email',
+                'email' => 'required|email|exists:Admins,email',
                 'password' => 'required|string|min:8',
             ]);
 
-            // Manually find the user by email
-            $user = User::where('email', $validated['email'])->first();
+            // Manually find the Admin by email
+            $Admin = Admin::where('email', $validated['email'])->first();
 
-            // Check if the user exists and if the password matches
-            if (!$user || !Hash::check($request->password, $user->password)) {
+            // Check if the Admin exists and if the password matches
+            if (!$Admin || !Hash::check($request->password, $Admin->password)) {
                 return response()->json(['message' => 'Invalid credentials'], 401);
             }
 
-            // Generate an API token for the authenticated user
-            $token = $user->createToken('API Token')->plainTextToken;
+            // Generate an API token for the authenticated Admin
+            $token = $Admin->createToken('API Token')->plainTextToken;
 
             return response()->json([
                 'message' => 'Login successful',
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
 
     /**
-     * Register a new user.
+     * Register a new Admin.
      */
     public function register(Request $request)
     {
@@ -60,19 +60,19 @@ class AuthController extends Controller
             // Validate the request directly in the controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|unique:Admins,email',
                 'password' => 'required|string|min:8|confirmed',
             ]);
 
-            // Create a new user
-            $user = User::create([
+            // Create a new Admin
+            $Admin = Admin::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Generate a token for the newly registered user
-            $token = $user->createToken('API Token')->plainTextToken;
+            // Generate a token for the newly registered Admin
+            $token = $Admin->createToken('API Token')->plainTextToken;
 
             return response()->json([
                 'message' => 'Registration successful',
@@ -86,15 +86,15 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout user and revoke tokens.
+     * Logout Admin and revoke tokens.
      */
     public function logout(Request $request)
     {
         try {
-            $user = $request->user();
+            $Admin = $request->Admin();
 
-            // Revoke all tokens for the user
-            $user->tokens()->delete();
+            // Revoke all tokens for the Admin
+            $Admin->tokens()->delete();
 
             return response()->json(['message' => 'Logout successful']);
         } catch (Exception $e) {
