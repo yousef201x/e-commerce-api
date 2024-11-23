@@ -3,10 +3,10 @@
 
 ## **Rate Limiting**
 - **Middleware:** `AuthRateLimiter`  
-- Applies to all routes in this group to prevent abuse. Limits requests based on IP | max request per minute 10.
+- Applies to all routes in this group to prevent abuse. Limits requests based on IP , (max request per minute 10).
 
 - **Middleware:** `RateLimite`  
-- Applies to api/user to prevent abuse. Limits requests based on IP | max request per minute 200. 
+- Applies to api/user to prevent abuse. Limits requests based on IP , (max request per minute 200). 
 
 ---
 
@@ -232,7 +232,7 @@
 
 ---
 
-### 2. **Register as Admin**
+### 2. **Login as Admin**
 - **Domain:** `dashboard.your-domain.com`  
 - **Endpoint:** `/register`  
 - **Method:** `POST`  

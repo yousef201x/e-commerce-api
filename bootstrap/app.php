@@ -15,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('api')
                 ->group([
                     base_path('routes/api/auth.php'),
-                    base_path('routes/api/user.php')
+                    base_path('routes/api/user.php'),
+                    base_path('routes/api/admin.php'),
                 ]);
         },
         web: __DIR__ . '/../routes/web.php',
