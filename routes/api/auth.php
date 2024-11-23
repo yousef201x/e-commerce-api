@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\Admins\AdminAuthController;
 use App\Http\Controllers\Api\Users\UserAuthController;
 use App\Http\Middleware\AuthRateLimiter;
 use App\Http\Middleware\VerifyAdminAuth;
-use App\Http\Middleware\VerifyUserAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(AuthRateLimiter::class)->group(function () {
