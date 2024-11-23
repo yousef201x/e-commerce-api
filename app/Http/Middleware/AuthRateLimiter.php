@@ -6,8 +6,13 @@ use Closure;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
-class RateLimit
+class AuthRateLimiter
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     protected $limiter;
 
     public function __construct(RateLimiter $limiter)
@@ -15,7 +20,7 @@ class RateLimit
         $this->limiter = $limiter;
     }
 
-    public function handle($request, Closure $next, $maxAttempts = 200, $decayMinutes = 1)
+    public function handle($request, Closure $next, $maxAttempts = 10, $decayMinutes = 1)
     {
         $key = $request->ip();
 

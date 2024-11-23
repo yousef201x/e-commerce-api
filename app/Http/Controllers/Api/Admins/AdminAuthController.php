@@ -91,7 +91,7 @@ class AdminAuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $Admin = $request->Admin();
+            $Admin = $request->admin();
 
             // Revoke all tokens for the Admin
             $Admin->tokens()->delete();
