@@ -13,6 +13,7 @@
 ## **User Authentication**
 
 ### 1. **Register as User**
+- **Domain:** `your-domain.com`  
 - **Endpoint:** `api/register`  
 - **Method:** `POST`  
 - **Description:** Register a new user.  
@@ -67,6 +68,7 @@
 ---
 
 ### 2. **Login as User**
+- **Domain:** `your-domain.com`  
 - **Endpoint:** `api/login`  
 - **Method:** `POST`  
 - **Middleware:** `AuthRateLimiter` 
@@ -117,6 +119,7 @@
 ---
 
 ### 3. **Logout as User**
+- **Domain:** `your-domain.com`  
 - **Endpoint:** `api/logout`  
 - **Method:** `POST`  
 - **Description:** Logs out the authenticated user.  
@@ -144,6 +147,7 @@
 ---
 
 ### 4. **User Details**
+- **Domain:** `your-domain.com`  
 - **Endpoint:** `api/user`  
 - **Method:** `GET`  
 - **Description:** Returns user info.  
