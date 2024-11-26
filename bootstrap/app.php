@@ -1,33 +1,28 @@
 <?php
 
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Routing\Router;
 
 return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        function (Router $router) {
-            // API routes
-            $router->middleware('api')
-                ->prefix('api')
-                ->group([
-                    base_path('routes/api/auth.php'),
-                    base_path('routes/api/user.php'),
-                    base_path('routes/api/admin.php'),
-                ]);
-
-            // Web routes
-            $router->group([], function ($router) {
-                require base_path('routes/web.php');
+    ->withRouting(function (Router $router) {
+        // API Routes
+        $router->middleware('api')
+            ->prefix('api')
+            ->group(function () {
+                require base_path('routes/api/auth.php');
+                require base_path('routes/api/user.php');
+                require base_path('routes/api/admin.php');
             });
-        },
-        commands: __DIR__ . '/../routes/console.php',
-        health: '/up',
-    )
-    ->withMiddleware(function (Middleware $middleware) {
-        //
+
+        // Web Routes
+        $router->group([], function () {
+            require base_path('routes/web.php');
+        });
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+    ->withMiddleware(function ($middleware) {
+        // Add global middleware or modify existing ones if necessary
+    })
+    ->withExceptions(function ($exceptions) {
+        // Handle global exceptions if necessary
+    })
+    ->create();
