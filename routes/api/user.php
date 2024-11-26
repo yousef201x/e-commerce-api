@@ -1,10 +1,11 @@
 <?php
 
+
+use App\Http\Middleware\RateLimit;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-
-Route::domain(env('APP_URL'))->group(function () {
+Route::middleware(RateLimit::class)->domain(env('APP_URL'))->group(function () {
     Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
         // Get the authenticated user
         $user = $request->user();
@@ -15,6 +16,3 @@ Route::domain(env('APP_URL'))->group(function () {
         ]);
     });
 });
-
-
-// Route::middleware();
