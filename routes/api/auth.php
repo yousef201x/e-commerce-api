@@ -17,7 +17,7 @@ Route::middleware(AuthRateLimiter::class)->group(function () {
         Route::post('register', [UserAuthController::class, 'register']);
         Route::post('logout', [UserAuthController::class, 'logout'])->middleware('auth:sanctum');
         // Send Reset password Email
-        Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+        Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware();
     });
 
     // Define routes for login, register, logout as Admin
@@ -27,16 +27,5 @@ Route::middleware(AuthRateLimiter::class)->group(function () {
         Route::post('logout', [AdminAuthController::class, 'logout'])->middleware('auth:sanctum');
         // Send Reset password Email
         Route::post('password/email', [AdminForgotPasswordController::class, 'sendResetLinkEmail']);
-    });
-
-    Route::get('/test-email', function () {
-        try {
-            Mail::raw('This is a test email', function ($message) {
-                $message->to('your-email@example.com')->subject('Test Email');
-            });
-            return 'Email sent successfully!';
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
     });
 });

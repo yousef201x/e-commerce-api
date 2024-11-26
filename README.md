@@ -178,6 +178,42 @@
     }
     ```
 
+
+### 5. **Get reset password link via email as user**
+- **Domain:** `your-domain.com`  
+- **Endpoint:** `api/password/email`  
+- **Method:** `POST`  
+- **Description:** Sends a reset password link via email.  
+- **Middleware:** `AuthRateLimiter`  
+- **Request Headers:**
+    ```plaintext
+    Accept: application/json
+    ```
+- **Response Example:**
+    ```json
+    {
+        "message": "A password reset link has been successfully sent to your email"
+    }
+    ```
+
+- **Validation errors response example:**
+    ```json
+    {
+        "error": "Invalid email address provided.",
+        "details": {
+            "email": [
+                "The email field is required."
+            ]
+        }
+    }
+    ```
+
+- **Inserted email doesn't match our record reponse example:**
+    ```json
+    {
+        "error": "We were unable to send a reset link to this email address."
+    }
+    ```
 ---
 
 ## **Admin Authentication**
@@ -312,6 +348,66 @@
     }
     ```
 
+### 4. **Admin Details**
+- **Domain:** `dashboard.your-domain.com`  
+- **Endpoint:** `api/admin`  
+- **Method:** `GET`  
+- **Description:** Returns admin info.  
+- **Middleware:** `auth:admin`,`RateLimit`  
+- **Request Headers:**
+    ```plaintext
+    Accept: application/json
+    Authorization: Bearer your-auth-token
+    ```
+- **Response Example:**
+    ```json
+    {
+        "user": {
+            "id": 1,
+            "name": "User",
+            "email": "example@mail.com",
+            "email_verified_at": null,
+            "created_at": "2024-11-20T16:20:20.000000Z",
+            "updated_at": "2024-11-20T16:20:20.000000Z"
+         }
+    }
+    ```
+
+### 5. **Get reset password link via email as admin**
+- **Domain:** `dashboard.your-domain.com`  
+- **Endpoint:** `api/password/email`  
+- **Method:** `POST`  
+- **Description:** Sends a reset password link via email.  
+- **Middleware:** `AuthRateLimiter`  
+- **Request Headers:**
+    ```plaintext
+    Accept: application/json
+    ```
+- **Response Example:**
+    ```json
+    {
+        "message": "A password reset link has been successfully sent to your email"
+    }
+    ```
+
+- **Validation errors response example:**
+    ```json
+    {
+        "error": "Invalid email address provided.",
+        "details": {
+            "email": [
+                "The email field is required."
+            ]
+        }
+    }
+    ```
+
+- **Inserted email doesn't match our record reponse example:**
+    ```json
+    {
+        "error": "We were unable to send a reset link to this email address."
+    }
+    ```
 
 ---
 
