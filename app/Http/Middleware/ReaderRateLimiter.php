@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
-class RateLimit
+class ReaderRateLimiter
 {
     protected $limiter;
 

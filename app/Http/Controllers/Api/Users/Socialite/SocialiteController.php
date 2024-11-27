@@ -34,6 +34,7 @@ class SocialiteController extends Controller
 
                 // Return the user and token as a response
                 return response()->json([
+                    'success' => "Register succesful !",
                     'user' => $existingUser,
                     'token' => $token,
                 ]);
@@ -50,7 +51,7 @@ class SocialiteController extends Controller
 
                 // Return the user and token
                 return response()->json([
-                    'message' => "Logged in succesfully !",
+                    'success' => "Logged in succesfully !",
                     'user' => $newUser,
                     'token' => $token,
                 ]);

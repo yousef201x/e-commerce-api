@@ -1,18 +1,23 @@
 <?php
 
-
-use App\Http\Middleware\RateLimit;
+use App\Http\Controllers\Api\Users\AccountController;
+use App\Http\Middleware\ActionRateLimiter;
+use App\Http\Middleware\ReaderRateLimiter;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 
-Route::middleware(RateLimit::class)->domain(env('APP_URL'))->group(function () {
-    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-        // Get the authenticated user
-        $user = $request->user();
+Route::domain(env('APP_URL'))->group(function () {
 
-        // Return the user data
-        return response()->json([
-            'user' => $user,
-        ]);
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::middleware(ReaderRateLimiter::class)->group(function () {
+            Route::get('/user', [AccountController::class, 'userInfo']);
+        });
+
+        Route::middleware(ActionRateLimiter::class)->group(function () {
+            Route::post('/user/update/name', [AccountController::class, 'updateName']);
+        });
+
+        Route::middleware(ActionRateLimiter::class)->group(function () {
+            Route::post('/user/update/email', [AccountController::class, 'updateEmail']);
+        });
     });
 });

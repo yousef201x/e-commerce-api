@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\Api\Admins\AccountController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use App\Http\Middleware\ActionRateLimiter;
+use App\Http\Middleware\ReaderRateLimiter;
 
 Route::domain('dashboard.' . env('APP_URL'))->group(function () {
-    Route::middleware(['auth:admin'])->get('/admin', function (Request $request) {
-        // Get the authenticated user
-        $user = $request->user();
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::middleware(ReaderRateLimiter::class)->group(function () {
+            Route::get('/admin', [AccountController::class, 'adminInfo']);
+        });
 
-        // Return the user data
-        return response()->json([
-            'user' => $user,
-        ]);
+        Route::middleware(ActionRateLimiter::class)->group(function () {
+            Route::post('/admin/update/name', [AccountController::class, 'updateName']);
+        });
+
+        Route::middleware(ActionRateLimiter::class)->group(function () {
+            Route::post('/admin/update/email', [AccountController::class, 'updateEmail']);
+        });
     });
 });

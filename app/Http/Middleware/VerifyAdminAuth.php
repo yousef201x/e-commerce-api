@@ -19,7 +19,7 @@ class VerifyAdminAuth
     {
         // Check if the request is authenticated as an admin using Sanctum
         if (!Auth::guard('admin')->check()) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
         return $next($request);

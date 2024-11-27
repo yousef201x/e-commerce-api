@@ -30,23 +30,22 @@ class UserAuthController extends Controller
 
             // Check if the user exists and if the password matches
             if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json(['message' => 'Invalid credentials'], 401);
+                return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
             // Generate an API token for the authenticated user
             $token = $user->createToken('API Token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Login successful',
+                'success' => 'Login successful',
                 'user' => $user,
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'An unexpected error occurred',
-                'error' => $e->getMessage(),
+                'error' => 'An unexpected error occurred',
             ], 500);
         }
     }
@@ -76,14 +75,14 @@ class UserAuthController extends Controller
             $token = $user->createToken('API Token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Registration successful',
+                'success' => 'Registration successful',
                 'user' => $user,
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred', 'error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'An unexpected error occurred'], 500);
         }
     }
 
@@ -98,9 +97,9 @@ class UserAuthController extends Controller
             // Revoke all tokens for the user
             $user->tokens()->delete();
 
-            return response()->json(['message' => 'Logout successful']);
+            return response()->json(['success' => 'Logout successful']);
         } catch (Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred', 'error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'An unexpected error occurred'], 500);
         }
     }
 }

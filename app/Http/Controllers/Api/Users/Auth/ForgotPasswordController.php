@@ -18,32 +18,30 @@ class ForgotPasswordController extends Controller
     {
         try {
             // Validate the email
-            $request->validate(['email' => 'required|email']);
+            $request->validate(['email' => 'required|email|exists:users,email']);
 
             // Attempt to send the reset link
             $response = Password::sendResetLink($request->only('email'));
 
             if ($response == Password::RESET_LINK_SENT) {
                 return response()->json([
-                    'message' => 'A password reset link has been successfully sent to your email'
+                    'success' => 'A password reset link has been successfully sent to your email'
                 ], 200);
             } else {
-                // Handle the case where the email is not found or link cannot be sent
+                // Handle the case where the link cannot be sent
                 return response()->json([
-                    'error' => 'We were unable to send a reset link to this email address.'
-                ], 400);
+                    'error' => 'A server error has occurred. Please try again later.'
+                ], 500);
             }
         } catch (ValidationException $e) {
             // Handle validation errors
             return response()->json([
-                'error' => 'Invalid email address provided.',
-                'details' => $e->errors()
+                'error' => $e->errors(),
             ], 422);
         } catch (Exception $e) {
             // Catch all other exceptions
             return response()->json([
                 'error' => 'An unexpected error occurred while processing your request.',
-                'details' => $e->getMessage()
             ], 500);
         }
     }
@@ -73,7 +71,7 @@ class ForgotPasswordController extends Controller
         );
 
         return $response === Password::PASSWORD_RESET
-            ? response()->json(['message' => 'Password reset successfully!'], 200)
-            : response()->json(['message' => 'Failed to reset password'], 400);
+            ? response()->json(['success' => 'Password reset successfully!'], 200)
+            : response()->json(['error' => 'Failed to reset password'], 400);
     }
 }

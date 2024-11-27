@@ -21,32 +21,30 @@ class ForgotPasswordController extends Controller
     {
         try {
             // Validate the email
-            $request->validate(['email' => 'required|email']);
+            $request->validate(['email' => 'required|email|exists:admins,email']);
 
             // Attempt to send the reset link
             $response = Password::broker('admins')->sendResetLink($request->only('email'));
 
             if ($response == Password::RESET_LINK_SENT) {
                 return response()->json([
-                    'message' => 'A password reset link has been successfully sent to your email'
+                    'success' => 'A password reset link has been successfully sent to your email'
                 ], 200);
             } else {
-                // Handle the case where the email is not found or link cannot be sent
+                // Handle the case where the link cannot be sent
                 return response()->json([
-                    'error' => 'We were unable to send a reset link to this email address.'
-                ], 400);
+                    'error' => 'A server error has occurred. Please try again later.'
+                ], 500);
             }
         } catch (ValidationException $e) {
             // Handle validation errors
             return response()->json([
-                'error' => 'Invalid email address provided.',
-                'details' => $e->errors()
+                'error' => $e->errors(),
             ], 422);
         } catch (Exception $e) {
             // Catch all other exceptions
             return response()->json([
                 'error' => 'An unexpected error occurred while processing your request.',
-                'details' => $e->getMessage()
             ], 500);
         }
     }
@@ -81,13 +79,12 @@ class ForgotPasswordController extends Controller
         );
 
         if ($status == Password::PASSWORD_RESET) {
-            return response()->json(['message' => trans($status)], 200);
+            return response()->json(['success' => trans($status)], 200);
         }
 
         // Log or debug the actual failure status
         return response()->json([
-            'message' => 'Failed to reset password',
-            'status' => $status,
+            'error' => 'Failed to reset password'
         ], 400); // Return the actual status for debugging
     }
 }

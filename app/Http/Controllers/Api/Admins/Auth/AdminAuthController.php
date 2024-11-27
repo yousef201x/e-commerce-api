@@ -27,26 +27,25 @@ class AdminAuthController extends Controller
             ]);
 
             // Manually find the Admin by email
-            $Admin = Admin::where('email', $validated['email'])->first();
+            $admin = Admin::where('email', $validated['email'])->first();
 
             // Check if the Admin exists and if the password matches
-            if (!$Admin || !Hash::check($request->password, $Admin->password)) {
-                return response()->json(['message' => 'Invalid credentials'], 401);
+            if (!$admin || !Hash::check($request->password, $admin->password)) {
+                return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
             // Generate an API token for the authenticated Admin
-            $token = $Admin->createToken('API Token')->plainTextToken;
+            $token = $admin->createToken('API Token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Login successful',
+                'success' => 'Login successful',
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'An unexpected error occurred',
-                'error' => $e->getMessage(),
+                'error' => 'Server Error'
             ], 500);
         }
     }
@@ -66,23 +65,25 @@ class AdminAuthController extends Controller
             ]);
 
             // Create a new Admin
-            $Admin = Admin::create([
+            $admin = Admin::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
             ]);
 
             // Generate a token for the newly registered Admin
-            $token = $Admin->createToken('API Token')->plainTextToken;
+            $token = $admin->createToken('API Token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Registration successful',
+                'success' => 'Registration successful',
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json(['error' => $e->errors()], 422);
         } catch (Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Server Error'
+            ], 500);
         }
     }
 
@@ -104,9 +105,9 @@ class AdminAuthController extends Controller
             });
 
 
-            return response()->json(['message' => 'Logout successful']);
+            return response()->json(['success' => 'Logout successful'], 200);
         } catch (Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred', 'error' => $e->getMessage()], 500);
+            return response()->json(['error' => 'server Error'], 500);
         }
     }
 }
