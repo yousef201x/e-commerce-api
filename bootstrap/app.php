@@ -9,9 +9,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $router->middleware('api')
             ->prefix('api')
             ->group(function () {
-                require base_path('routes/api/auth.php');
-                require base_path('routes/api/user.php');
-                require base_path('routes/api/admin.php');
+                require base_path('routes/api/auth/user.php');
+                require base_path('routes/api/auth/admin.php');
+                require base_path('routes/api/auth/socialite.php');
+                require base_path('routes/api/users/user.php');
+                require base_path('routes/api/admins/admin.php');
             });
 
         // Web Routes
