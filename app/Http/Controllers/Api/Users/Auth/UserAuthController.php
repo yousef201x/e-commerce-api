@@ -38,6 +38,7 @@ class UserAuthController extends Controller
 
             return response()->json([
                 'message' => 'Login successful',
+                'user' => $user,
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {
@@ -76,6 +77,7 @@ class UserAuthController extends Controller
 
             return response()->json([
                 'message' => 'Registration successful',
+                'user' => $user,
                 'token' => $token,
             ]);
         } catch (ValidationException $e) {

@@ -41,8 +41,6 @@ class SocialiteController extends Controller
                 $newUser = User::create([
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
-                    'provider' => $provider === 'google' ? 'google' : 'facebook',  // e.g., 'google'
-                    'provider_id' => $user->getId(),
                     'password' => Hash::make(Str::random(16)), // Generate a random password
                 ]);
 
