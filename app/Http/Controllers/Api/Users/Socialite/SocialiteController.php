@@ -50,13 +50,11 @@ class SocialiteController extends Controller
 
                 // Return the user and token
                 return response()->json([
+                    'message' => "Logged in succesfully !",
                     'user' => $newUser,
                     'token' => $token,
                 ]);
             }
-
-            // Redirect to a page after successful login
-            return response()->json(['message' => "Logged in succesfully !"], 200);
         } catch (Exception $e) {
             return response()->json(['error' => 'Authentication Failed !'], 400);
         }
